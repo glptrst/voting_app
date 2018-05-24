@@ -1,4 +1,6 @@
+"use strict";
 const express = require('express');
+const config = require('./config');
 
 const app = express();
 
@@ -10,4 +12,4 @@ app.get('/', (req, res, next) => {
     next();
 });
 
-app.listen(3000, () => console.log('Listening on port 3000!'));
+app.listen(config.PORT, () => console.log('Listening on port 3000!'));
