@@ -19,6 +19,21 @@ app.set('view engine', 'pug');
 app.get('/', (req, res, next) => {
     res.render('index', {title: 'Voting App'});
     next();
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  var err = new Error('File Not Found');
+  err.status = 404;
+  next(err);
+});
+
+// error handler
+// define as the last app.use callback
+app.use(function(err, req, res, next) {
+  res.status(err.status || 500);
+  res.render('error', {
+    message: err.message,
+    error: {}
+  });
 });
 
 app.listen(config.PORT, () => console.log('Listening on port 3000!'));
