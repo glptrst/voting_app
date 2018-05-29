@@ -16,9 +16,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.set('views', './views');
 app.set('view engine', 'pug');
 
-app.get('/', (req, res, next) => {
-    res.render('index', {title: 'Voting App'});
-    next();
+// include routes
+var routes = require('./routes/index');
+app.use('/', routes);
+
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   var err = new Error('File Not Found');
