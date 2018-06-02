@@ -1,12 +1,15 @@
 "use strict";
 const express = require('express');
 const bodyParser = require('body-parser');
-const mongodb = require('mongodb');
+const mongoose = require('mongoose');
 const config = require('./config');
-const voting_app = require('./voting_app');
-
-var MongoClient = require('mongodb').MongoClient;
 const app = express();
+
+// mongodb connection
+mongoose.connect(config.DBURI);
+const db = mongoose.connection;
+// mongo error
+db.on('error', console.error.bind(console, 'connection error:'));
 
 // parse incoming requests
 app.use(bodyParser.json());
