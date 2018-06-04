@@ -14,7 +14,32 @@ router.get('/register', function(req, res, next) {
 
 // POST /register
 router.post('/register', function(req, res, next) {
-    return res.send('User Created');
+    if (req.body.email     &&
+	req.body.username  &&
+	req.body.password  &&
+	req.body.confirmPassword
+       ) {
+	// confirm that user typed same password twice
+	if (req.body.password !== req.body.confirmPassword) {
+            let err = new Error('Passwords do not match.');
+            err.status = 400;
+            return next(err);
+	}
+	
+	// create object with form input
+	var userData = {
+	    email: req.body.email,
+	    username: req.body.username,
+	    password: req.body.password
+	};
+	
+	// TODO: insert doc into Mongo
+
+    } else {
+	let err = new Error('All fields required.');
+	err.status = 400;
+	return next(err);
+    }
 });
 
 module.exports = router;
