@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var User = require('../models/user');
 
 // GET /
 router.get('/', function(req, res, next) {
@@ -33,8 +34,14 @@ router.post('/register', function(req, res, next) {
 	    password: req.body.password
 	};
 	
-	// TODO: insert doc into Mongo
-
+	// use schema's `create` method to insert document into Mongo
+	User.create(userData, function(error, user) {
+	    if (error) {
+		return next(error);
+	    } else {
+		return res.redirect('/profile');
+	    }
+	});
     } else {
 	let err = new Error('All fields required.');
 	err.status = 400;
