@@ -2,6 +2,22 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 
+// GET /profile
+router.get('/profile', function(req, res, next) {
+    if (! req.session.userId) {
+	let err = new Error('Not authorized.');
+	err.status = 401;
+	return next(err);
+    }
+    User.findById(req.session.userId)
+	.exec(function(error, user) {
+	    if (error) {
+		return next(error);
+	    } else {
+		return res.render('profile', { title: 'Profile', username: user.username });
+	    }
+	});
+});
 
 // GET /login
 router.get('/login', function(req, res, next) {
@@ -10,7 +26,22 @@ router.get('/login', function(req, res, next) {
 
 // POST /login
 router.post('/login', function(req, res, next){
-    return res.send('logged in... not really');
+    if (req.body.email && req.body.password) {
+	User.authenticate(req.body.email, req.body.password, function(err, user) {
+	    if (err || !user) {
+		let err = new Error('Wrong email or password');
+		err.status = 401;
+		return next(err);
+	    } else {
+		req.session.userId = user._id;
+		return res.redirect('/profile');
+	    }
+	});
+    } else {
+	let err = new Error('Email and password required');
+	err.status = 401;
+	return next(err);
+    }
 });
 
 // GET /
@@ -49,6 +80,7 @@ router.post('/register', function(req, res, next) {
 	    if (error) {
 		return next(error);
 	    } else {
+		req.session.userId = user._id; // automatically log in when register
 		return res.redirect('/profile');
 	    }
 	});

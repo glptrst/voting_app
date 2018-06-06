@@ -3,7 +3,15 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const config = require('./config');
+const session = require('express-session');
 const app = express();
+
+// use sessions for tracking logins
+app.use(session({
+    secret: 'test test test',
+    resave: true,
+    saveUninitialized: false
+}));
 
 // mongodb connection
 mongoose.connect(config.DBURI);
