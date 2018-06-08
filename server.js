@@ -23,6 +23,9 @@ db.on('error', console.error.bind(console, 'connection error:'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+// serve static files from /public
+app.use(express.static(__dirname + '/public'));
+
 // view engine setup
 app.set('views', './views');
 app.set('view engine', 'pug');
