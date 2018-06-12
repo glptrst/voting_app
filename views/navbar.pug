@@ -5,10 +5,14 @@ nav.navbar.navbar-fixed-top.navbar-dark.bg-inverse
       a.navbar-brand(href='/')
         p FCC Voting App        
       .nav-items.clearfix
-        a.nav-item.nav-link(href='register') Sign Up
+        if !currentUser
+          a.nav-item.nav-link(href='register') Sign Up
         a.nav-item.nav-link(href='about') About
         a.nav-item.nav-link(href='contact') Contact
         a.nav-item.nav-link(href='profile') My Profile
 
-      a.btn.btn-info.pull-md-right(href='login') Login
+        if currentUser
+          a.btn.btn-light.pull-md-right(href='/logout') Log out
+        else
+          a.btn.btn-info.pull-md-right(href='login') Login
 
