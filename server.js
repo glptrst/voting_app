@@ -1,27 +1,12 @@
-"use strict";
-const express = require('express');
-const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
-const config = require('./config');
-const session = require('express-session');
-const app = express();
-
-// use sessions for tracking logins
-app.use(session({
-    secret: 'test test test',
-    resave: true,
-    saveUninitialized: false
-}));
-
-// make user ID available in templates
-app.use(function (req, res, next) {
-    res.locals.currentUser = req.session.userId;
-    next();
-});
+var config = require('./config');
+var express = require('express');
+var bodyParser = require('body-parser');
+var mongoose = require('mongoose');
+var app = express();
 
 // mongodb connection
 mongoose.connect(config.DBURI);
-const db = mongoose.connection;
+var db = mongoose.connection;
 // mongo error
 db.on('error', console.error.bind(console, 'connection error:'));
 
@@ -33,8 +18,8 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(__dirname + '/public'));
 
 // view engine setup
-app.set('views', './views');
 app.set('view engine', 'pug');
+app.set('views', __dirname + '/views');
 
 // include routes
 var routes = require('./routes/index');
@@ -57,4 +42,7 @@ app.use(function(err, req, res, next) {
   });
 });
 
-app.listen(config.PORT, () => console.log(`Listening on port ${config.PORT}`));
+// listen on port 3000
+app.listen(config.PORT, function () {
+  console.log('Express app listening on port 3000');
+});
