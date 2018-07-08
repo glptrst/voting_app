@@ -28,6 +28,8 @@ router.post('/register', function(req, res, next) {
 	    password: req.body.password
 	};
 
+	console.log('post request received');
+
 	// use schema's `create` method to insert document into Mongo
 	User.create(userData, function(error, user){
 	    if (error) {
