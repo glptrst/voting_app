@@ -33,8 +33,10 @@ router.post('/register', function(req, res, next) {
 	// use schema's `create` method to insert document into Mongo
 	User.create(userData, function(error, user){
 	    if (error) {
+		console.log('hello?');
 		return next(error);
 	    } else {
+		console.log('uh');
 		return res.redirect('/profile');
 	    }
 	});
