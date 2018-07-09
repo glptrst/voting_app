@@ -30,11 +30,11 @@ router.post('/register', function(req, res, next) {
 	};
 	*/
 
-	var userData = new User = {
+	var userData = new User ({
 	    email: req.body.email,
 	    username: req.body.username,
 	    password: req.body.password
-	};
+	});
 
 	//console.log('post request received');
 
