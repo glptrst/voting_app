@@ -22,21 +22,39 @@ router.post('/register', function(req, res, next) {
 	} 
 
 	// create object with form input
+	/*
 	var userData = {
 	    email: req.body.email,
 	    username: req.body.username,
 	    password: req.body.password
 	};
+	*/
 
-	console.log('post request received');
+	var userData = new User {
+	    email: req.body.email,
+	    username: req.body.username,
+	    password: req.body.password
+	};
+
+	//console.log('post request received');
 
 	// use schema's `create` method to insert document into Mongo
+	/*
 	User.create(userData, function(error, user){
 	    if (error) {
 		console.log('hello?');
 		return next(error);
 	    } else {
 		console.log('uh');
+		return res.redirect('/profile');
+	    }
+	});
+	*/
+	
+	userData.save(function(err, user){
+	    if (err) {
+		return next(error);
+	    } else {
 		return res.redirect('/profile');
 	    }
 	});
