@@ -16,7 +16,7 @@ router.post('/register', function(req, res, next) {
         req.body.confirmPassword) {
 
 	if (req.body.password !== req.body.confirmPassword) {
-	    var err = new Error('Passwords do not match');
+	    let err = new Error('Passwords do not match');
 	    err.status = 400;
 	    return next(err);
 	} 
@@ -42,7 +42,7 @@ router.post('/register', function(req, res, next) {
 	});
 
     } else {
-	var err = new Error('All fields are required.');
+	let err = new Error('All fields are required.');
 	err.status = 400;
 	return next(err);
     }
