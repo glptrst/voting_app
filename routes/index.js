@@ -3,6 +3,16 @@ var router = express.Router();
 // require the schema we created
 var User = require('../models/user');
 
+// GET /login
+router.get('/login', function(req, res, next) {
+    return res.render('login', { title: 'Log in' });
+});
+
+// POST /login
+router.post('/login', function(req, res, next) {
+    return res.send('Logged in');
+});
+
 // GET /register
 router.get('/register', function(req, res, next) {
     return res.render('register', { title: 'Sign Up' });
