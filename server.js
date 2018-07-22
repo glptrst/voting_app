@@ -2,7 +2,19 @@ var config = require('./config');
 var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
+var session = require('express-session');
 var app = express();
+
+// uses sessions for tracking logins
+app.use(session({
+    secret: 'viri cu ta ficca', // secret, which add another level of
+				// security, is the only required option.
+    resave: true, // The resave option forces the session to be stored in the
+		  // session store whether anything changes during the request
+		  // or not
+    saveUninitialized: false // saveUninitialized forces an unitialized session
+			     // to be stored in the session store.
+}));
 
 // mongodb connection
 mongoose.connect(config.DBURI);

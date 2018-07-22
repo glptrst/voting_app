@@ -17,7 +17,29 @@ var UserSchema = new mongoose.Schema({
 	required: true
     }
 });
-var User = mongoose.model('User', UserSchema);
+
+// authenticate input against database documents (The schema's
+// `statics` object lets you add methods directly to the model)
+UserSchema.statics.authenticate = function(email, password, callback) {
+    User.findOne({ email: email })
+	.exec(function(error, user){
+	    if (error) {
+		return callback(error);
+	    } else if ( !user ) {
+		var err = new Error('User not found.');
+		err.status = 401;
+		return callback(err);
+	    }
+	    bcrypt.compare(password, user.password, function(error, result) {
+		if (result === true) {
+		    return callback(null, user);
+		} else {
+		    return callback();
+		}
+	    });
+	});
+}
+
 // hash password before saving it to database using `pre` method
 UserSchema.pre('save', function(next){
     // `this`, in this context, refers to the object we created containing the
@@ -31,4 +53,5 @@ UserSchema.pre('save', function(next){
 	next();
     });
 });
+var User = mongoose.model('User', UserSchema);
 module.exports = User;
