@@ -3,6 +3,23 @@ var router = express.Router();
 // require the schema we created
 var User = require('../models/user');
 
+// GET /profile
+router.get('/profile', function(req, res, next) {
+    if (! req.session.userId ) {
+	let err = new Error('Not authorized');
+	err.status = 403;
+	return next(err);
+    }
+    User.findById(req.session.userId)
+	.exec(function(error, user) {
+	    if (error) {
+		return next(error);
+	    } else {
+		return res.render('profile', { title: 'Profile', username: user.username, email: user.email});
+	    }
+	});
+});
+
 // GET /login
 router.get('/login', function(req, res, next) {
     return res.render('login', { title: 'Log in' });
