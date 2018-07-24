@@ -7,7 +7,7 @@ var app = express();
 
 // uses sessions for tracking logins
 app.use(session({
-    secret: 'viri cu ta ficca', // secret, which add another level of
+    secret: config.SECRET, // secret, which add another level of
 				// security, is the only required option.
     resave: true, // The resave option forces the session to be stored in the
 		  // session store whether anything changes during the request
