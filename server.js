@@ -16,6 +16,15 @@ app.use(session({
 			     // to be stored in the session store.
 }));
 
+// make user ID available in templates
+app.use(function (req, res, next){
+    /* the response has the `locals` property that provides a way to
+     * add information the response object. In express all the views
+     * have access to the response locals object */
+    res.locals.currentUser = req.session.userId;
+    next();
+});
+
 // mongodb connection
 mongoose.connect(config.DBURI);
 var db = mongoose.connection;
