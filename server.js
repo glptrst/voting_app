@@ -3,7 +3,14 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 var app = express();
+
+// mongodb connection
+mongoose.connect(config.DBURI);
+var db = mongoose.connection;
+// mongo error
+db.on('error', console.error.bind(console, 'connection error:'));
 
 // uses sessions for tracking logins
 app.use(session({
@@ -12,8 +19,11 @@ app.use(session({
     resave: true, // The resave option forces the session to be stored in the
 		  // session store whether anything changes during the request
 		  // or not
-    saveUninitialized: false // saveUninitialized forces an unitialized session
+    saveUninitialized: false, // saveUninitialized forces an unitialized session
 			     // to be stored in the session store.
+    store: new MongoStore({
+	mongooseConnection: db
+    })
 }));
 
 // make user ID available in templates
@@ -24,12 +34,6 @@ app.use(function (req, res, next){
     res.locals.currentUser = req.session.userId;
     next();
 });
-
-// mongodb connection
-mongoose.connect(config.DBURI);
-var db = mongoose.connection;
-// mongo error
-db.on('error', console.error.bind(console, 'connection error:'));
 
 // parse incoming requests
 app.use(bodyParser.json());
