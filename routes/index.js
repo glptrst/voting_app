@@ -2,7 +2,19 @@ var express = require('express');
 var router = express.Router();
 // require the schema we created
 var User = require('../models/user');
+var Poll = require('../models/poll');
 var mid = require('../middleware');
+
+// GET /createpoll
+router.get('/createpoll', function(req, res, next) {
+    return res.render('createpoll', { title: 'Create New Poll' });
+});
+
+// POST /createpoll
+router.post('/createpoll', function (req, res, next) {
+    // TODO
+
+});
 
 // GET /profile
 router.get('/profile', mid.requiresLogin, function(req, res, next) {
@@ -100,16 +112,6 @@ router.post('/register', function(req, res, next) {
 // GET /
 router.get('/', function(req, res, next) {
   return res.render('index', { title: 'Home' });
-});
-
-// GET /about
-router.get('/about', function(req, res, next) {
-  return res.render('about', { title: 'About' });
-});
-
-// GET /contact
-router.get('/contact', function(req, res, next) {
-  return res.render('contact', { title: 'Contact' });
 });
 
 module.exports = router;
