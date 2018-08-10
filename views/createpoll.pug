@@ -1,0 +1,12 @@
+extends layout
+
+block content
+  .main.container.text-xs-center
+      h1.display-4 Create a New Poll
+      // register form
+      form(method='POST' action='/createpoll')
+        div.form-group
+          label(for='title') Title:
+          input#title.form-control(type='text', placeholder='title' name='title')
+           
+          p options: ....

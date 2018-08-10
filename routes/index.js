@@ -5,6 +5,11 @@ var User = require('../models/user');
 var Poll = require('../models/poll');
 var mid = require('../middleware');
 
+//GET /polls
+router.get('/polls_list', function(req, res, next) {
+    return res.render('polls_list', { title: 'Polls' } );
+});
+
 // GET /createpoll
 router.get('/createpoll', function(req, res, next) {
     return res.render('createpoll', { title: 'Create New Poll' });
