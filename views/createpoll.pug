@@ -3,10 +3,12 @@ extends layout
 block content
   .main.container.text-xs-center
       h1.display-4 Create a New Poll
-      // register form
+
       form(method='POST' action='/createpoll')
         div.form-group
           label(for='title') Title:
           input#title.form-control(type='text', placeholder='title' name='title')
-           
-          p options: ....
+        div.form-group
+          label(for='options') Options (separated by line):
+          textarea.form-control(name='options')
+        button.btn.btn-primary(type='submit') Create Poll
