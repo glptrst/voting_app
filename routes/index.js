@@ -7,7 +7,13 @@ var mid = require('../middleware');
 
 //GET /polls
 router.get('/polls_list', function(req, res, next) {
-    return res.render('polls_list', { title: 'Polls' } );
+    // get polls
+    Poll.find({}, function(err, polls) {
+	if (err) {
+	    return next(err);
+	}
+	return res.render('polls_list', { title: 'Polls', polls: polls});
+    });
 });
 
 // GET /createpoll
