@@ -7,4 +7,6 @@ block content
 
       h2 Poll: #{poll_title}
 
-      p options TODO
+      ul
+        each val in poll_options
+          p #{val.title} #{val.votes}

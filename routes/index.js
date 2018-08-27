@@ -12,7 +12,7 @@ router.get('/poll', function(req, res, next) {
 	if (err) {
 	    return next(err);
 	}
-	return res.render('poll', { title: poll[0].title, poll_title: poll[0].title });
+	return res.render('poll', { title: poll[0].title, poll_title: poll[0].title, poll_options: poll[0].options });
     });
 });
 
