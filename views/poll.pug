@@ -7,6 +7,25 @@ block content
 
       h2 Poll: #{poll_title}
 
+      br
+
       ul
         each val in poll_options
           p #{val.title} #{val.votes}
+
+      p
+      
+      if currentUser
+        br
+        br
+
+        p vote!
+
+        form(method='POST' action='/poll')
+          select(name='option')
+            each val in poll_options
+              option #{val.title}
+          br
+          br
+          button.btn.btn-primary(type='submit') Submit
+        

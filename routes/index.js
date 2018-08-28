@@ -16,6 +16,12 @@ router.get('/poll', function(req, res, next) {
     });
 });
 
+//POST /poll
+router.post('/poll', mid.requiresLogin, function(req, res, next) {
+    console.log(req.body);
+    //TODO
+});
+
 //GET /polls_list
 router.get('/polls_list', function(req, res, next) {
     // get polls
