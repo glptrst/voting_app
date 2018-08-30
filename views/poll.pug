@@ -24,7 +24,7 @@ block content
         form(method='POST' action='/poll')
           select(name='option')
             each val in poll_options
-              option #{val.title}
+              option(value=poll_title + '<++>' + val.title) #{val.title}
           br
           br
           button.btn.btn-primary(type='submit') Submit
