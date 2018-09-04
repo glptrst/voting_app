@@ -22,25 +22,22 @@ router.post('/poll', mid.requiresLogin, function(req, res, next) {
     let optionTitle = req.body.option.split('<++>')[1]; 
 
     // check input?
+    // TODO
 
     Poll.findOne({title: pollTitle}, function(err, poll) {
     	if (err) {
     	    return next(err);
     	}
 
-	// let currentVotes;
-	// poll.options.forEach(function(option){
-	//     if (option.title === optionTitle) {
-	// 	currentVotes = option.votes; 
-	//     }
-	// });
+	poll.options.forEach(function(option){
+	    if (option.title === optionTitle) {
+		option.votes += 1;
+	    }
+	});
+	poll.save();
 
-	// add user vote
-	// TODO
-	
+	return res.render('poll', { title: pollTitle, poll_title: pollTitle, poll_options: poll.options});
     });
-
-
 });
 
 //GET /polls_list
