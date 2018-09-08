@@ -27,33 +27,32 @@ router.post('/poll', mid.requiresLogin, function(req, res, next) {
 	    console.log(error);
 	} else {
 	    console.log(user.username + ' ' + user.email);
-	    if (user.pollsVoted.includes(pollTitle)) {
-		console.log('user has already participated in this poll');
-		//TODO
+	    if (user.pollsHasParticipatedIn.includes(pollTitle)) {
+		let err = new Error('You can vote only once in a poll!');
+		err.status = 403;
+		return next(err);
 	    } else {
-		console.log('cool');
-		//TODO
+		// update user's pollsHasParticipatedIn array
+		user.pollsHasParticipatedIn.push(pollTitle);
+		user.save();
+
+		// add vote to db
+		Poll.findOne({title: pollTitle}, function(err, poll) {
+		    if (err) {
+			return next(err);
+		    }
+		    poll.options.forEach(function(option){
+			if (option.title === optionTitle) {
+			    option.votes += 1;
+			}
+		    });
+		    poll.save();
+		    return res.render('poll', { title: pollTitle,
+						poll_title: pollTitle,
+						poll_options: poll.options});
+		});
 	    }
 	}
-    });
-
-    // check input?
-    // TODO
-
-    // add vote to db
-    Poll.findOne({title: pollTitle}, function(err, poll) {
-    	if (err) {
-    	    return next(err);
-    	}
-
-	poll.options.forEach(function(option){
-	    if (option.title === optionTitle) {
-		option.votes += 1;
-	    }
-	});
-	poll.save();
-
-	return res.render('poll', { title: pollTitle, poll_title: pollTitle, poll_options: poll.options});
     });
 });
 
