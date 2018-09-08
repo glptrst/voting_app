@@ -21,9 +21,26 @@ router.post('/poll', mid.requiresLogin, function(req, res, next) {
     let pollTitle = req.body.option.split('<++>')[0]; 
     let optionTitle = req.body.option.split('<++>')[1]; 
 
+    // check if user has already voted for this poll
+    User.findById(req.session.userId, function(error, user) {
+	if (error) {
+	    console.log(error);
+	} else {
+	    console.log(user.username + ' ' + user.email);
+	    if (user.pollsVoted.includes(pollTitle)) {
+		console.log('user has already participated in this poll');
+		//TODO
+	    } else {
+		console.log('cool');
+		//TODO
+	    }
+	}
+    });
+
     // check input?
     // TODO
 
+    // add vote to db
     Poll.findOne({title: pollTitle}, function(err, poll) {
     	if (err) {
     	    return next(err);

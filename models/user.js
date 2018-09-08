@@ -15,7 +15,8 @@ var UserSchema = new mongoose.Schema({
     password: {
 	type: String,
 	required: true
-    }
+    },
+    pollsVoted: [String]
 });
 
 // authenticate input against database documents (The schema's
