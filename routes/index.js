@@ -12,7 +12,11 @@ router.get('/poll', function(req, res, next) {
 	if (err) {
 	    return next(err);
 	}
-	return res.render('poll', { title: poll[0].title, poll_title: poll[0].title, poll_options: poll[0].options });
+	return res.render('poll', {
+	    title: poll[0].title,
+	    poll_title: poll[0].title,
+	    poll_options: poll[0].options
+	});
     });
 });
 
@@ -68,43 +72,45 @@ router.get('/polls_list', function(req, res, next) {
 });
 
 // GET /createpoll
-router.get('/createpoll', function(req, res, next) {
-    return res.render('createpoll', { title: 'Create New Poll' });
+router.get('/createpoll', mid.requiresLogin, function(req, res, next) {
+    User.findById(req.session.userId, function(error, user){
+	return res.render('createpoll', { title: 'Create New Poll', author: user.username});
+    });
 });
 
 // POST /createpoll
 router.post('/createpoll', mid.requiresLogin, function (req, res, next) {
-    let title = req.body.title;
-    let options = req.body.options.split('\r\n');
+    User.findById(req.session.userId, function(error, user){
+	let title = req.body.title;
+	let options = req.body.options.split('\r\n');
 
-    // remove empty strings if any (in case the user has left more
-    // than one consecutive new lines
-    for (var i = 0; i < options.length; i++) {
-	if (options[i] === '') {
-	    options.splice(i, 1);
-	    i--;
+	// remove empty strings if any (in case the user has left more
+	// than one consecutive new lines
+	for (var i = 0; i < options.length; i++) {
+	    if (options[i] === '') {
+		options.splice(i, 1);
+		i--;
+	    }
 	}
-    }
-    // make string 'foo' into object {title: 'foo'}
-    for (var i = 0; i < options.length; i++) {
-	options[i] = {title: options[i], votes: 0};
-    }
+	// make string 'foo' into object {title: 'foo'}
+	for (var i = 0; i < options.length; i++) {
+	    options[i] = {title: options[i], votes: 0};
+	}
 
-    let poll = {
-	title: title,
-	author: "TODO",
-	options: options
-    };
+	let poll = {
+	    title: title,
+	    author: user.username,
+	    options: options
+	};
 
-    console.log(poll);
-
-    // use schema's `create` method to insert document into Mongo
-    Poll.create(poll, function(error, user) {
-     	if (error) {
-     	    return next(error);
-     	} else {
-     	    return res.redirect('/polls_list');
-     	}
+	// use schema's `create` method to insert document into Mongo
+	Poll.create(poll, function(error, doc) {
+     	    if (error) {
+     		return next(error);
+     	    } else {
+     		return res.redirect('/polls_list');
+     	    }
+	});
     });
 });
 
