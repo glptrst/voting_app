@@ -5,7 +5,18 @@ var User = require('../models/user');
 var Poll = require('../models/poll');
 var mid = require('../middleware');
 
-//GET /poll
+// GET my_polls
+router.get('/my_polls', mid.requiresLogin, function(req, res, next) {
+    User.findById(req.session.userId, function(error, user) {
+	if (error) {
+	    return next(error);
+	} else {
+	    return res.render('my_polls', {title: 'my polls', myPolls: user.pollsHasParticipatedIn});
+	}
+    });
+});
+
+// GET /poll
 router.get('/poll', function(req, res, next) {
     let param = req.query.title;
     Poll.find({ title: param }, function(err, poll) {
@@ -20,7 +31,7 @@ router.get('/poll', function(req, res, next) {
     });
 });
 
-//POST /poll
+// POST /poll
 router.post('/poll', mid.requiresLogin, function(req, res, next) {
     let pollTitle = req.body.option.split('<++>')[0]; 
     let optionTitle = req.body.option.split('<++>')[1]; 
@@ -28,9 +39,8 @@ router.post('/poll', mid.requiresLogin, function(req, res, next) {
     // check if user has already voted for this poll
     User.findById(req.session.userId, function(error, user) {
 	if (error) {
-	    console.log(error);
+	    return next(error);
 	} else {
-	    console.log(user.username + ' ' + user.email);
 	    if (user.pollsHasParticipatedIn.includes(pollTitle)) {
 		let err = new Error('You can vote only once in a poll!');
 		err.status = 403;
@@ -60,7 +70,7 @@ router.post('/poll', mid.requiresLogin, function(req, res, next) {
     });
 });
 
-//GET /polls_list
+// GET /polls_list
 router.get('/polls_list', function(req, res, next) {
     // get polls
     Poll.find({}, function(err, polls) {
@@ -150,7 +160,7 @@ router.post('/login', function(req, res, next) {
     if (req.body.email && req.body.password) {
 	User.authenticate(req.body.email, req.body.password, function (error, user) {
 	    if (error || !user) {
-		var err = new Error('Wrong email or password');
+		var err = new Error(error || 'Wrong email or password');
 		err.status = 401;
 		return next(err);
 	    } else {
