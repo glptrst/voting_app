@@ -11,9 +11,13 @@ block content
 
       ul
         each val in poll_options
-          p #{val.title} #{val.votes}
+          p.chartData #{val.title} #{val.votes}
 
       p
+
+
+      div(id='canvas-holder' style='width:30%')
+        canvas(id='chart')
       
       if currentUser
         br
@@ -29,3 +33,5 @@ block content
           br
           button.btn.btn-primary(type='submit') Submit
         
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js")
+  script(src="scripts/poll_chart.js")
