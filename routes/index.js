@@ -12,7 +12,18 @@ router.get('/my_polls', mid.requiresLogin, function(req, res, next) {
 	if (error) {
 	    return next(error);
 	} else {
-	    return res.render('my_polls', {title: 'my polls', myPolls: user.pollsHasParticipatedIn});
+	    //return res.render('my_polls', {title: 'my polls', myPolls: user.pollsHasParticipatedIn});
+	    Poll.find({author: user.username}, function(err, polls){
+		if (err) {
+		    return next(error);
+		} else {
+		    let userPolls = [];
+		    for (let i = 0; i < polls.length; i++) {
+			userPolls.push(polls[i].title);
+		    }
+		    return res.render('my_polls', {title: 'my polls', myPolls: userPolls});
+		}
+	    });
 	}
     });
 });
