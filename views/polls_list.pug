@@ -2,17 +2,9 @@ extends layout
 
 block content
   .main.container.text-xs-center
-      if currentUser
-        a.btn.btn-primary(href='createpoll') Create New Poll
-
-      p
-
       h1.display-3 Polls
 
       ul
         each val in polls
-          a(href="/poll?title=" + val.title)
-            li= val.title
-
-
-
+          p
+            a(href="/poll?title=" + val.title) #{val.title}

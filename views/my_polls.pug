@@ -1,7 +1,7 @@
 extends layout
 
 block content
-  .main.container.clearfix
+  .main.container.text-xs-center
 
       p
 
@@ -12,5 +12,5 @@ block content
       else
         ul
           each val in myPolls
-            a(href="/poll?title=" + val)
-              li= val
+            p
+              a(href="/poll?title=" + val) #{val}
