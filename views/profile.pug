@@ -4,7 +4,19 @@ block content
   .main.container.clearfix
     .row
       .col-md-8.col-md-offset-2
-        h1.display-4 
-          p #{username}
-        h2.email
-          p #{email}
+        h2
+          p username: #{username}
+        h2
+          p email: #{email}
+
+        br
+
+        h2
+          p Polls Created:
+        if !myPolls.length
+          p you haven't created any poll so far.
+        else
+          ul
+            each val in myPolls
+              p
+                a(href="/poll?title=" + val) #{val}

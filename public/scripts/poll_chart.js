@@ -14,9 +14,14 @@ var chart = new Chart(ctx, {
 	    data: chartData,
 	    backgroundColor: [
 		'red',
+		'blue',
 		'orange',
+		'black',
 		'yellow',
 		'green',
+		'white',
+		'grey',
+		'magenta'
 	    ]
 	}],
 	options: {

@@ -6,28 +6,6 @@ var User = require('../models/user');
 var Poll = require('../models/poll');
 var mid = require('../middleware');
 
-// GET my_polls
-router.get('/my_polls', mid.requiresLogin, function(req, res, next) {
-    User.findById(req.session.userId, function(error, user) {
-	if (error) {
-	    return next(error);
-	} else {
-	    //return res.render('my_polls', {title: 'my polls', myPolls: user.pollsHasParticipatedIn});
-	    Poll.find({author: user.username}, function(err, polls){
-		if (err) {
-		    return next(error);
-		} else {
-		    let userPolls = [];
-		    for (let i = 0; i < polls.length; i++) {
-			userPolls.push(polls[i].title);
-		    }
-		    return res.render('my_polls', {title: 'my polls', myPolls: userPolls});
-		}
-	    });
-	}
-    });
-});
-
 // GET /poll
 router.get('/poll', function(req, res, next) {
     let param = req.query.title;
@@ -144,14 +122,33 @@ router.post('/createpoll', mid.requiresLogin, function (req, res, next) {
 
 // GET /profile
 router.get('/profile', mid.requiresLogin, function(req, res, next) {
-    User.findById(req.session.userId)
-	.exec(function(error, user) {
-	    if (error) {
-		return next(error);
-	    } else {
-		return res.render('profile', { title: 'Profile', username: user.username, email: user.email});
-	    }
-	});
+    // User.findById(req.session.userId)
+    // 	.exec(function(error, user) {
+    // 	    if (error) {
+    // 		return next(error);
+    // 	    } else {
+    // 		return res.render('profile', { title: 'Profile', username: user.username, email: user.email});
+    // 	    }
+    // 	});
+    User.findById(req.session.userId, function(error, user) {
+	if (error) {
+	    return next(error);
+	} else {
+	    //return res.render('my_polls', {title: 'my polls', myPolls: user.pollsHasParticipatedIn});
+	    Poll.find({author: user.username}, function(err, polls){
+		if (err) {
+		    return next(err);
+		} else {
+		    let userPolls = [];
+		    for (let i = 0; i < polls.length; i++) {
+			userPolls.push(polls[i].title);
+		    }
+		    return res.render('profile', {title: 'Profile', username: user.username, email: user.email, myPolls: userPolls});
+		}
+	    });
+	}
+    });
+
 });
 
 // GET /logout
