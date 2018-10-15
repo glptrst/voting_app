@@ -9,14 +9,14 @@ var mid = require('../middleware');
 // GET /poll
 router.get('/poll', function(req, res, next) {
     let param = req.query.title;
-    Poll.find({ title: param }, function(err, poll) {
+    Poll.findOne({ title: param }, function(err, poll) {
 	if (err) {
 	    return next(err);
 	}
 	return res.render('poll', {
-	    title: poll[0].title,
-	    poll_title: poll[0].title,
-	    poll_options: poll[0].options
+	    title: poll.title,
+	    poll_title: poll.title,
+	    poll_options: poll.options
 	});
     });
 });
