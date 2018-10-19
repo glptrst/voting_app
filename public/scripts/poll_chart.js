@@ -1,8 +1,9 @@
 let chartLabels = [];
 let chartData = [];
-for (let i = 0; i < this.document.getElementsByClassName('chartData').length; i++) {
-    chartLabels.push(this.document.getElementsByClassName('chartData')[i].textContent.split(' ')[0]);
-    chartData.push(this.document.getElementsByClassName('chartData')[i].textContent.split(' ')[1]);
+var elements = this.document.getElementsByClassName('chartData');
+for (i = 0; i < elements.length; i++) {
+    chartLabels.push(elements[i].textContent.split(' ').slice(0, elements[i].textContent.split(' ').length-1).join(' '));
+    chartData.push(elements[i].textContent.split(' ').slice(-1).join());
 }
 
 var ctx = this.document.getElementById('chart').getContext('2d');
