@@ -12,12 +12,31 @@ router.get('/poll', function(req, res, next) {
     Poll.findOne({ title: param }, function(err, poll) {
 	if (err) {
 	    return next(err);
+	} else {
+	    if (req.session.userId) {
+		User.findById(req.session.userId, function(error, user) {
+		    if (error) {
+			return next(error);
+		    } else {
+			if (poll.author === user.username) {
+			    return res.render('poll', {
+				title: poll.title,
+				poll_title: poll.title,
+				poll_options: poll.options,
+				author: true
+			    });
+			} else {
+			    return res.render('poll', {
+				title: poll.title,
+				poll_title: poll.title,
+				poll_options: poll.options,
+				author: false
+			    });
+			}
+		    }
+		});
+	    }
 	}
-	return res.render('poll', {
-	    title: poll.title,
-	    poll_title: poll.title,
-	    poll_options: poll.options
-	});
     });
 });
 
