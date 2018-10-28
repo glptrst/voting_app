@@ -25,15 +25,15 @@ router.get('/poll', function(req, res, next) {
 				poll_options: poll.options,
 				author: true
 			    });
-			} else {
-			    return res.render('poll', {
-				title: poll.title,
-				poll_title: poll.title,
-				poll_options: poll.options,
-				author: false
-			    });
-			}
+			} 
 		    }
+		});
+	    } else {
+		return res.render('poll', {
+		    title: poll.title,
+		    poll_title: poll.title,
+		    poll_options: poll.options,
+		    author: false
 		});
 	    }
 	}
