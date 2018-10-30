@@ -6,6 +6,36 @@ var User = require('../models/user');
 var Poll = require('../models/poll');
 var mid = require('../middleware');
 
+// POST /delete_poll
+router.post('/delete_poll', function(req, res, next) {
+    Poll.findOne({ title: req.body.pollTitle }, function(err, poll) {
+	if (err) {
+	    return next(err);
+	} else {
+	    User.findById(req.session.userId, function(error, user) {
+		if (error) {
+		    return next(err);
+		} else {
+		    if (user.username === poll.author) {
+			// delete poll
+			Poll.deleteOne({ title: req.body.pollTitle }, function(err){
+			    if (err) return next(err);
+			    else console.log('Poll deleted correctly');
+			});
+		    } else {
+			// you are not authorized
+			res.status(401);
+			res.render('error', {
+			    message: 'Unauthorized: you are not the author of this poll!',
+			    error: {}
+			});
+		    }
+		}
+	    });
+	}
+    });
+});
+
 // GET /poll
 router.get('/poll', function(req, res, next) {
     let param = req.query.title;
@@ -25,7 +55,14 @@ router.get('/poll', function(req, res, next) {
 				poll_options: poll.options,
 				author: true
 			    });
-			} 
+			} else {
+			    return res.render('poll', {
+				title: poll.title,
+				poll_title: poll.title,
+				poll_options: poll.options,
+				author: true
+			    });
+			}
 		    }
 		});
 	    } else {
@@ -141,14 +178,6 @@ router.post('/createpoll', mid.requiresLogin, function (req, res, next) {
 
 // GET /profile
 router.get('/profile', mid.requiresLogin, function(req, res, next) {
-    // User.findById(req.session.userId)
-    // 	.exec(function(error, user) {
-    // 	    if (error) {
-    // 		return next(error);
-    // 	    } else {
-    // 		return res.render('profile', { title: 'Profile', username: user.username, email: user.email});
-    // 	    }
-    // 	});
     User.findById(req.session.userId, function(error, user) {
 	if (error) {
 	    return next(error);
