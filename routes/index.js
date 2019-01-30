@@ -128,7 +128,8 @@ router.get('/createpoll', mid.requiresLogin, function(req, res, next) {
 // POST /createpoll
 router.post('/createpoll', mid.requiresLogin, function (req, res, next) {
     let title = req.body.title;
-    let options = req.body.options.split('\r\n');
+    // put options in an array using split and remove, if any, empty ones using filter
+    let options = req.body.options.split('\r\n').filter(a => a !== '');
 
     // 9 options are the limit!
     if (options.length > 9) {
@@ -137,14 +138,6 @@ router.post('/createpoll', mid.requiresLogin, function (req, res, next) {
     }
     
     User.findById(req.session.userId, function(error, user){
-	// remove empty strings if any (in case the user has left more
-	// than one consecutive new lines
-	for (var i = 0; i < options.length; i++) {
-	    if (options[i] === '') {
-		options.splice(i, 1);
-		i--;
-	    }
-	}
 	// make string 'foo' into object {title: 'foo'}
 	for (var i = 0; i < options.length; i++) {
 	    options[i] = {title: options[i], votes: 0};
