@@ -129,7 +129,7 @@ router.get('/createpoll', mid.requiresLogin, function(req, res, next) {
 router.post('/createpoll', mid.requiresLogin, function (req, res, next) {
     let title = req.body.title;
     // put options in an array using split and remove, if any, empty ones using filter
-    let options = req.body.options.split('\r\n').filter(a => a !== '');
+    let options = req.body.options.split(/\r?\n/).filter(a => a !== '');
 
     // 9 options are the limit!
     if (options.length > 9) {
